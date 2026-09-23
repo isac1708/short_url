@@ -12,7 +12,7 @@ export const shortenRoute: FastifyPluginAsyncZod = async (app) => {
       schema: {
         tags: ["URLs"],
         summary: "Encurtar URL",
-        description: "Gera um código único em Base62 via Redis INCR e persiste no MongoDB e Redis",
+        description: "Gera um código único em Base62 via Redis INCR e persiste no MongoDB",
         body: shortenUrlBodySchema,
         response: {
           201: shortenUrlResponseSchema,
@@ -26,14 +26,11 @@ export const shortenRoute: FastifyPluginAsyncZod = async (app) => {
       const numericId = await redis.incr(COUNTER_KEY);
       const code = encodeId(numericId);
 
-      await Promise.all([
-        UrlModel.create({
-          numericId,
-          code,
-          originalUrl: url
-        }),
-        redis.set(`url:${code}`, url)
-      ]);
+      await UrlModel.create({
+        numericId,
+        code,
+        originalUrl: url
+      });
 
       const shortUrl = `${env.BASE_URL}/${code}`;
 

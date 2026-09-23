@@ -2,7 +2,7 @@
 
 Encurtador de URLs de alta performance desenvolvido com TypeScript, Fastify, Zod, Scalar API Reference, Base62 Hashids, MongoDB e Redis.
 
-Projetado para suportar volumetria de escrita (1.160 req/s) e leitura (11.600 req/s) utilizando IDs atômicos no Redis e cache em memória.
+Projetado para suportar alta volumetria utilizando IDs atômicos no Redis e persistência no MongoDB.
 
 ## Tecnologias
 
@@ -11,7 +11,7 @@ Projetado para suportar volumetria de escrita (1.160 req/s) e leitura (11.600 re
 - **fastify-type-provider-zod** & **Zod**
 - **@scalar/fastify-api-reference** & **@fastify/swagger**
 - **Hashids** (conversão Base62 com ofuscação)
-- **ioredis** (contador atômico `INCR` e cache L1)
+- **ioredis** (contador atômico `INCR`)
 - **MongoDB** & **Mongoose**
 - **Docker Compose**
 
