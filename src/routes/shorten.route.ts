@@ -1,6 +1,6 @@
 import { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 import { env } from "../config/env.js";
-import { redis } from "../config/redis.js";
+import { COUNTER_KEY, redis } from "../config/redis.js";
 import { UrlModel } from "../models/url.model.js";
 import { errorResponseSchema, shortenUrlBodySchema, shortenUrlResponseSchema } from "../schemas/url.schema.js";
 import { encodeId } from "../utils/hashids.js";
@@ -23,7 +23,11 @@ export const shortenRoute: FastifyPluginAsyncZod = async (app) => {
     async (request, reply) => {
       const { url } = request.body;
 
-      const numericId = await redis.incr("shorturl:counter");
+      let numericId = await redis.incr(COUNTER_KEY);
+      if (numericId < 238328) {
+        await redis.set(COUNTER_KEY, 238328);
+        numericId = 238328;
+      }
       const code = encodeId(numericId);
 
       await Promise.all([

@@ -1,11 +1,12 @@
 import { buildApp } from "./app.js";
 import { env } from "./config/env.js";
 import { connectMongo, disconnectMongo } from "./config/mongo.js";
-import { redis } from "./config/redis.js";
+import { initRedisCounter, redis } from "./config/redis.js";
 
 async function bootstrap() {
   try {
     await redis.connect();
+    await initRedisCounter();
     await connectMongo();
 
     const app = await buildApp();
