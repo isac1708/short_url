@@ -23,11 +23,7 @@ export const shortenRoute: FastifyPluginAsyncZod = async (app) => {
     async (request, reply) => {
       const { url } = request.body;
 
-      let numericId = await redis.incr(COUNTER_KEY);
-      if (numericId < 238328) {
-        await redis.set(COUNTER_KEY, 238328);
-        numericId = 238328;
-      }
+      const numericId = await redis.incr(COUNTER_KEY);
       const code = encodeId(numericId);
 
       await Promise.all([
